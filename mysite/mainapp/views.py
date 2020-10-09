@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, get_list_or_404, redirect
 import datetime
@@ -17,6 +18,25 @@ from mainapp.models import *
 from mainapp.serializers import *
 from mainapp.forms import *
 from mainapp.filters import *
+from django.contrib.auth import *
+from .forms import RegisterForm
 
-def index(request):
+
+def mainpage(request):
+    users_list = User.objects.all()
+    print(users_list)
+    print(request.user)
+
     return HttpResponse("Hello World. First Django Project. PythonCircle.Com")
+
+
+def register(request):
+    if request.method == "POST":
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            print('valid')
+            form.save()
+        return redirect('login')
+    else:
+        form = RegisterForm()
+    return render(request, "registration/register.html", {"form": form})
