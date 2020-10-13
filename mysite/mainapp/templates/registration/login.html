@@ -2,9 +2,12 @@
 {% load crispy_forms_tags %}
 
 {% block main %}
-<div class="card">
-<div class="card-body">
-<h4 class="card-title">Log in to your account</h4>
+
+<div  class="card">
+<div style="color:#030308; background-color:#030308" class="card-body">
+
+<h4 style="color:white; background-color:#030308"  class="card-title">Log in to your account</h4>
+<div style="color:white; background-color:#030308">
 
 <form method="post">
 {% csrf_token %}
@@ -12,8 +15,11 @@
 
 {{ form|crispy }}
 
-<button type="submit" class="btn btn-primary btn-block">Log in</button>
+<button type="submit"  class="btn btn-primary btn-block">Log in</button>
+<button type="button"  class="btn btn-primary btn-block" onclick="location.href='{% url 'register' %}'">Register</button>
 </form>
+
+</div>
 </div>
 </div>
 {% endblock %}

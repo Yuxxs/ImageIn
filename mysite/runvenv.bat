@@ -1,2 +1,2 @@
 @echo off >nul
-start C:\Users\User\Desktop\FilmsSite\init\Scripts\activate.bat >nul
+start C:\Users\User\Desktop\ImageIn\init\Scripts\activate.bat >nul

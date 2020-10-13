@@ -1,9 +1,11 @@
 from django.contrib.auth.models import User
-from django.http import HttpResponse, JsonResponse
+from django.contrib.auth.views import LoginView
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, get_list_or_404, redirect
 import datetime
 # Create your views here.
 from django.template.context_processors import csrf
+from django.template.defaulttags import register
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import generics, permissions, status
 from rest_framework.decorators import api_view, permission_classes
@@ -19,24 +21,146 @@ from mainapp.serializers import *
 from mainapp.forms import *
 from mainapp.filters import *
 from django.contrib.auth import *
-from .forms import RegisterForm
+from .forms import *
+from django.views.generic import View
+from django.urls import reverse
+
+@permission_classes((permissions.AllowAny,))
+class LoginView(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'registration/login.html'
+
+    def post(self, request):
+
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                return redirect(reverse('userpage',
+                                kwargs={"username": request.user.username}))
+            else:
+                return redirect('login')
+        else:
+            return redirect('login')
+
+    def get(self, request):
+        form = AuthenticationForm()
+        return Response({'form': form})
 
 
-def mainpage(request):
-    users_list = User.objects.all()
-    print(users_list)
-    print(request.user)
+@permission_classes((permissions.AllowAny,))
+class UserMainPage(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'user_mainpage.html'
 
-    return HttpResponse("Hello World. First Django Project. PythonCircle.Com")
+    def post(self, request, *args, **kwargs):
+        form = ArticleForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            note = form.save(commit=False)
+
+            note.author = request.user
+
+            note.save()
+        return redirect('userpage')
+
+    def get(self, request, *args, **kwargs):
+        articles = Article.objects.filter(author=request.user)
+        articleform = ArticleForm()
+        return Response({'articleform': articleform, 'articles': articles})
+
+
+@permission_classes((permissions.AllowAny,))
+class FeedPage(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'feed.html'
+
+    def get(self, request, *args, **kwargs):
+        articles = Article.objects.order_by('id').all()
+        articles.query.set_limits(0, 2)
+        articleform = ArticleForm()
+        return Response({'articles': articles})
+
+
+@permission_classes((permissions.AllowAny,))
+class ArticlePage(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'article.html'
+
+    def post(self, request, *args, **kwargs):
+        ...
+
+    def delete(self, request, *args, **kwargs):
+        ...
+
+    def get(self, request, *args, **kwargs):
+        article_id = kwargs.get('article_id')
+        article = Article.objects.get(id=article_id)
+
+        return Response({'article': article})
+
+    def increment_likes(self, request, *args, **kwargs):
+        article_id = kwargs.get('article_id')
+        Like.objects.create(user=request.user,article = Article.objects.get(id=article_id))
+        return redirect(reverse('articlepage',
+                         kwargs={"article_id": article_id}))
+
+    def increment_views(user,article_id):
+        Viewing.objects.create(user=user,article = Article.objects.get(id=article_id))
+
+
+@permission_classes((permissions.AllowAny,))
+class AdminMainPage(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'user_admin_mainpage.html'
+
+    def get(request, *args, **kwargs):
+        users_list = User.objects.all()
+        for i in range(len(users_list)):
+            users_list[i].is_active = not users_list[i].is_active
+        form = CustomUserCreationForm()
+        return Response({'users': users_list, 'form': form})
+
+    def post(request, *args, **kwargs):
+        if request.method == "POST":
+            form = UserCreationForm(request.POST)
+            if form.is_valid():
+                form.save()
+            return redirect('login')
+        return redirect('adminpage')
+
+    def delete(request, *args, **kwargs):
+
+        username = kwargs.get('username')
+        User.objects.filter(username=username).delete()
+        return redirect('adminpage')
+
+    def block(request, *args, **kwargs):
+        username = kwargs.get('username')
+        User.objects.filter(username=username).update(is_active=False)
+        return redirect('adminpage')
+
+    def unblock(request, *args, **kwargs):
+        username = kwargs.get('username')
+        User.objects.filter(username=username).update(is_active=True)
+        return redirect('adminpage')
 
 
 def register(request):
     if request.method == "POST":
-        form = RegisterForm(request.POST)
+
+        form = CustomUserCreationForm(request.POST)
+
         if form.is_valid():
-            print('valid')
+
             form.save()
+        else:
+            print(form.errors)
         return redirect('login')
     else:
-        form = RegisterForm()
+        form = CustomUserCreationForm()
+
     return render(request, "registration/register.html", {"form": form})

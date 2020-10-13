@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load my_extras %}
+{% load static %}
+
+{% block main %}
+
+<p1>{{ article.name }}</p1>
+<img style="border: 2px solid seagreen;" src="{% get_media_prefix %}{{article.image}}" >
+
+<p>{{ article.postdate }}
+<p>{{ article.total_likes }} <input type="image"  height =30 width =30 src="{% get_media_prefix %}resourses/like.png" onclick="location.href='{% url 'articlelike' article_id=article.id  %}'">
+<p>Количество просмотров: {{ article.total_views }}
+
+
+
+<p>{{ article.description }}
+{% endblock %}

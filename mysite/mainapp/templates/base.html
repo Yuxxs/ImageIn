@@ -1,19 +1,53 @@
-<!doctype  html>
+<!DOCTYPE html>
 <html  lang="en">
 <head>
-<link  rel="stylesheet"  href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"  integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"  crossorigin="anonymous">
-<title>FilmsBase</title>
+<style>
+  .menu {
+  display: flex;
+  border-radius: 25px;
+  border: 4px double lightblue;
+justify-content: flex-end;
+
+}
+.menupush {
+    margin-right: auto;
+}
+</style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+   <link  rel="stylesheet"  href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"  integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"  crossorigin="anonymous">
+
+<title>ImageIn</title>
 </head>
-<body>
+<body style="color:#030308; background-color:#030308" >
+{% load my_extras %}
+<font color="white" >
+
+
   <div  class="container">
-    <div  class="row justify-content-center">
+      <h1  align="center">ImageIn</h1>
+
+ {% url 'login' as login_url %}
+ {% if  not  request.path|to_str  == login_url  %}
+<div class = "menu" >
+<button style = "border-radius: 25px;" type="submit" class="btn btn-success" onclick="location.href='{% url 'userpage' username=user.get_username  %}'">Моя страница</button>
+<button style = "border-radius: 25px;" type="submit" class="btn btn-success" onclick="location.href='{% url 'feedpage' %}'">Лента</button>
+<button style = "border-radius: 25px;" type="submit" class="btn btn-success" onclick="location.href='{% url 'logout' %}'">Выйти</button>
+</div>
+
+<br>
+{% endif %}
+
+    <div  class="row justify-content-left">
+
       <div  class="col-4">
-      <h1  class="text-center">FilmsBase</h1>
+
       {% block main %}
 
       {% endblock %}
+
       </div>
     </div>
   </div>
+  </font>
 </body>
 </html>

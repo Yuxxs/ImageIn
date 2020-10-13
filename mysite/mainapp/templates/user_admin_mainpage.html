@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+{% load rest_framework %}
+{% load static %}
+
+{% block main %}
+
+
+
+<br>
+<br>
+<table border="1">
+<tr>
+
+    <td/>
+    <td/>
+    <td/>
+    <td>Id</td>
+    <td>Имя</td>
+    <td>E-Mail</td>
+    <td>Блокирован</td>
+</tr>
+{% for user in users %}
+<tr>
+<td>
+<form action="{% url 'adminuserblock' username=user.username %}" method="POST">
+{% csrf_token %}
+<input type="submit" value="Block">
+</form>
+</td>
+<td>
+<form action="{% url 'adminuserunblock' username=user.username %}" method="POST">
+{% csrf_token %}
+<input type="submit" value="Unblock">
+</form>
+</td>
+<td>
+<form action="{% url 'adminuserdelete' username=user.username %}" method="POST">
+{% csrf_token %}
+<input type="submit" value="Delete">
+</form>
+</td>
+
+</td>
+        <td>{{ user.id }}</td>
+        <td>{{ user.username }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.is_active }}</td>
+
+</tr>
+     {% endfor %}
+        </table>
+
+</br>
+</table>
+
+<p>Создание пользователя</p>
+    <form method="POST" class="form-group">
+	{% csrf_token %}
+	{{ form|crispy }}
+	<button type="submit" class="btn btn-success">Register User</button>
+    </form>
+{% endblock %}
+
