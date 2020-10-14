@@ -28,6 +28,8 @@ justify-content: flex-end;
 
  {% url 'login' as login_url %}
  {% if  not  request.path|to_str  == login_url  %}
+{% endif %}
+  {% if user.is_authenticated %}
 <div class = "menu" >
 <button style = "border-radius: 25px;" type="submit" class="btn btn-success" onclick="location.href='{% url 'userpage' username=user.get_username  %}'">Моя страница</button>
 <button style = "border-radius: 25px;" type="submit" class="btn btn-success" onclick="location.href='{% url 'feedpage' %}'">Лента</button>
@@ -35,16 +37,21 @@ justify-content: flex-end;
 </div>
 
 <br>
+
 {% endif %}
 
     <div  class="row justify-content-left">
 
       <div  class="col-4">
-
+{% block register %}
+ {% endblock %}
+{% block login %}
+ {% endblock %}
+ {% if user.is_authenticated %}
       {% block main %}
 
       {% endblock %}
-
+{% endif %}
       </div>
     </div>
   </div>

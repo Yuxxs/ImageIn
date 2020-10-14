@@ -10,23 +10,19 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserM
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 import settings
+from importlib_resources._common import _
 
 
 class Like(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              related_name='likes',
                              on_delete=models.CASCADE)
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id = models.PositiveIntegerField()
-    content_object = GenericForeignKey('content_type', 'object_id')
+
 
 class Viewing(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              related_name='views',
                              on_delete=models.CASCADE)
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id = models.PositiveIntegerField()
-    content_object = GenericForeignKey('content_type', 'object_id')
 
 
 class Article(models.Model):
@@ -38,11 +34,13 @@ class Article(models.Model):
     name = models.CharField(default='', null=True, max_length=50)
     description = models.TextField(default='', null=True)
     image = models.ImageField(upload_to='upload/')
-    likes = GenericRelation(Like)
-    views = GenericRelation(Viewing)
+    likes = models.ManyToManyField(Like, symmetrical=False,related_name='article_likes')
+    views = models.ManyToManyField(Viewing, symmetrical=False,related_name='article_views')
+
     @property
     def total_likes(self):
         return self.likes.count()
+
     @property
     def total_views(self):
         return self.views.count()

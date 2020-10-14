@@ -11,53 +11,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4e9f7e99-e6e0-4794-976a-57ec5d13367d" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/mysite.sqlite3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mysite/db.sqlite3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mysite/mainapp/backends.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mysite/mainapp/managers.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mysite/mainapp/migrations/0003_postimage.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mysite/mainapp/migrations/0004_auto_20201011_2047.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mysite/mainapp/migrations/0005_auto_20201011_2052.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mysite/mainapp/migrations/0006_auto_20201012_1052.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mysite/mainapp/migrations/0007_article_postdate.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mysite/mainapp/migrations/0008_auto_20201012_1738.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mysite/mainapp/migrations/0009_auto_20201013_1045.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mysite/mainapp/migrations/0010_viewing.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mysite/mainapp/template_tags/my_extras.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mysite/mainapp/templates/article.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mysite/mainapp/templates/feed.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mysite/media/resourses/like.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mysite/media/upload/eso1907a.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mysite/media/upload/eso1907a_o0HJe9Y.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mysite/media/upload/images.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mysite/media/upload/images_9lqJIAs.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mysite/media/upload/images_J55RF5r.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mysite/media/upload/images_a0v0a1N.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mysite/media/upload/images_b0cvMXp.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mysite/media/upload/images_cueOk2B.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mysite/media/upload/images_i8QUFhu.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mysite/media/upload/images_zZKzEgz.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mysite/media/upload/visual-reverse-image-search-v2_intro.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mysite/media/upload/Без_названия.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mysite/media/upload/Без_названия_6A7Uz3A.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mysite/media/upload/Без_названия_ZLup50H.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mysite/media/upload/Без_названия_x0X2IPq.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mysite/mainapp/migrations/0011_auto_20201013_1713.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mysite/mainapp/migrations/0012_auto_20201013_1814.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mysite/mainapp/templates/article_edit.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mysite/media/upload/Без_названия_1.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mysite/media/upload/Без_названия_1_SOP8yGx.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mysite/media/upload/Без_названия_dQDq1Pe.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mysite/media/upload/Без_названия_jKFEoPm.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mysite/media/upload/Без_названия_x5pNFj1.jpg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mysite/mainapp/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/mysite/mainapp/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mysite/mainapp/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/mysite/mainapp/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mysite/mainapp/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/mysite/mainapp/migrations/0001_initial.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mysite/mainapp/migrations/0002_delete_question.py" beforeDir="false" afterPath="$PROJECT_DIR$/mysite/mainapp/migrations/0002_delete_customuser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mysite/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/mysite/db.sqlite3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mysite/mainapp/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/mysite/mainapp/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mysite/mainapp/templates/article.html" beforeDir="false" afterPath="$PROJECT_DIR$/mysite/mainapp/templates/article.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mysite/mainapp/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/mysite/mainapp/templates/base.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mysite/mainapp/templates/registration/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/mysite/mainapp/templates/registration/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mysite/mainapp/templates/user_admin_mainpage.html" beforeDir="false" afterPath="$PROJECT_DIR$/mysite/mainapp/templates/user_admin_mainpage.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mysite/mainapp/templates/registration/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/mysite/mainapp/templates/registration/register.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mysite/mainapp/templates/user_mainpage.html" beforeDir="false" afterPath="$PROJECT_DIR$/mysite/mainapp/templates/user_mainpage.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mysite/mainapp/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/mysite/mainapp/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mysite/mainapp/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/mysite/mainapp/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mysite/runvenv.bat" beforeDir="false" afterPath="$PROJECT_DIR$/mysite/runvenv.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mysite/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/mysite/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mysite/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/mysite/urls.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

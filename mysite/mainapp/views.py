@@ -25,6 +25,7 @@ from .forms import *
 from django.views.generic import View
 from django.urls import reverse
 
+
 @permission_classes((permissions.AllowAny,))
 class LoginView(APIView):
     renderer_classes = [TemplateHTMLRenderer]
@@ -40,7 +41,7 @@ class LoginView(APIView):
             if user.is_active:
                 login(request, user)
                 return redirect(reverse('userpage',
-                                kwargs={"username": request.user.username}))
+                                        kwargs={"username": request.user.username}))
             else:
                 return redirect('login')
         else:
@@ -65,7 +66,8 @@ class UserMainPage(APIView):
             note.author = request.user
 
             note.save()
-        return redirect('userpage')
+        return redirect(reverse('userpage',
+                                kwargs={"username": request.user.username}))
 
     def get(self, request, *args, **kwargs):
         articles = Article.objects.filter(author=request.user)
@@ -80,7 +82,7 @@ class FeedPage(APIView):
 
     def get(self, request, *args, **kwargs):
         articles = Article.objects.order_by('id').all()
-        articles.query.set_limits(0, 2)
+        articles.query.set_limits(0, 10)
         articleform = ArticleForm()
         return Response({'articles': articles})
 
@@ -90,26 +92,56 @@ class ArticlePage(APIView):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'article.html'
 
-    def post(self, request, *args, **kwargs):
-        ...
+    def delete(request, *args, **kwargs):
+        article_id = kwargs.get('article_id')
+        article = Article.objects.get(id=article_id)
 
-    def delete(self, request, *args, **kwargs):
-        ...
+        article.delete()
+        return redirect(reverse('userpage',
+                                kwargs={"username": request.user.username}))
 
     def get(self, request, *args, **kwargs):
         article_id = kwargs.get('article_id')
         article = Article.objects.get(id=article_id)
-
+        if not article.author == request.user:
+            if len(Article.objects.get(id=article_id).views.filter(user=request.user)) == 0:
+                view = Viewing(user=request.user)
+                view.save()
+                Article.objects.get(id=article_id).views.add(view)
         return Response({'article': article})
 
-    def increment_likes(self, request, *args, **kwargs):
+    def increment_likes(request, *args, **kwargs):
         article_id = kwargs.get('article_id')
-        Like.objects.create(user=request.user,article = Article.objects.get(id=article_id))
+        article = Article.objects.get(id=article_id)
+        if not article.author == request.user:
+            if len(Article.objects.get(id=article_id).likes.filter(user=request.user)) == 0:
+                like = Like(user=request.user)
+                like.save()
+                article.likes.add(like)
         return redirect(reverse('articlepage',
-                         kwargs={"article_id": article_id}))
+                                kwargs={"article_id": article_id}))
 
-    def increment_views(user,article_id):
-        Viewing.objects.create(user=user,article = Article.objects.get(id=article_id))
+
+@permission_classes((permissions.AllowAny,))
+class ArticleEdit(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'article_edit.html'
+
+    def post(self, request, *args, **kwargs):
+        article_id = kwargs.get('article_id')
+        article = Article.objects.get(id=article_id)
+        form = ArticleForm(request.POST, request.FILES, instance=article)
+
+        if form.is_valid():
+            form.save()
+        return redirect(reverse('articlepage',
+                                kwargs={"article_id": article_id}))
+
+    def get(self, request, *args, **kwargs):
+        article_id = kwargs.get('article_id')
+        article = Article.objects.get(id=article_id)
+        articleform = ArticleForm(instance=article)
+        return Response({'articleform': articleform, 'article': article})
 
 
 @permission_classes((permissions.AllowAny,))

@@ -10,6 +10,7 @@ urlpatterns = [
    path('feed/', views.FeedPage.as_view(), name='feedpage'),
    path('articles/<int:article_id>', views.ArticlePage.as_view(), name='articlepage'),
    path('articles/<int:article_id>/delete', views.ArticlePage.delete, name='articledelete'),
+   path('articles/<int:article_id>/edit', views.ArticleEdit.as_view(), name='articleedit'),
    path('articles/<int:article_id>/like', views.ArticlePage.increment_likes, name='articlelike'),
 
    path('<str:username>/mainpage/', views.UserMainPage.as_view(), name='userpage'),
