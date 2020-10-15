@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load my_extras %}
+{% load static %}
+
+{% block main %}
+
+<p1>{{ article.name }}</p1>
+<img style="border: 2px solid seagreen;" src="{% get_media_prefix %}{{article.image}}" >
+
+<p>{{ article.postdate }}
+<p>{{ article.total_likes }}
+<form action="{% url 'articlelike' article_id=article.id  %}"  method="POST">
+  {% csrf_token %}
+ <input type="image"  height =30 width =30 src="{% get_media_prefix %}resourses/like.png">
+</form>
+<p>Количество просмотров: {{ article.total_views }}
+<p>Описание:{{ article.description }}
+<p>
+
+
+{% if article.author == user or user.is_superuser %}
+<button type="submit"  onclick="location.href='{% url 'articleedit' article_id=article.id  %}'">Редактировать</button>
+<form action="{% url 'articledelete' article_id=article.id %}" method="POST">
+{% csrf_token %}
+<input type="submit" value="Удалить">
+</form>
+{% endif %}
+{% endblock %}
