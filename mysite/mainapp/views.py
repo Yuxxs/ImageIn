@@ -1,3 +1,4 @@
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
@@ -15,15 +16,16 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 import mainapp
-from mainapp.models import *
+from mainapp.models import Article, HashTag, Like, Viewing
 
-from mainapp.serializers import *
-from mainapp.forms import *
-from mainapp.filters import *
 from django.contrib.auth import *
-from .forms import *
+
 from django.views.generic import View
 from django.urls import reverse
+
+from mainapp.forms import ArticleForm, HashTagForm, CustomUserCreationForm
+
+from mainapp.filters import ArticleFilter
 
 
 @permission_classes((permissions.AllowAny,))
@@ -72,7 +74,8 @@ class UserMainPage(APIView):
     def get(self, request, *args, **kwargs):
         articles = Article.objects.filter(author=request.user)
         articleform = ArticleForm()
-        return Response({'articleform': articleform, 'articles': articles})
+        filter = ArticleFilter(request.GET, queryset=articles)
+        return Response({'filter': filter, 'articleform': articleform})
 
 
 @permission_classes((permissions.AllowAny,))
@@ -83,8 +86,8 @@ class FeedPage(APIView):
     def get(self, request, *args, **kwargs):
         articles = Article.objects.order_by('id').all()
         articles.query.set_limits(0, 10)
-        articleform = ArticleForm()
-        return Response({'articles': articles})
+        filter = ArticleFilter(request.GET, queryset=articles)
+        return Response({'filter': filter})
 
 
 @permission_classes((permissions.AllowAny,))
@@ -103,12 +106,13 @@ class ArticlePage(APIView):
     def get(self, request, *args, **kwargs):
         article_id = kwargs.get('article_id')
         article = Article.objects.get(id=article_id)
+        hashtags = HashTag.objects.filter(article__id=article_id)
         if not article.author == request.user:
             if len(Article.objects.get(id=article_id).views.filter(user=request.user)) == 0:
                 view = Viewing(user=request.user)
                 view.save()
                 Article.objects.get(id=article_id).views.add(view)
-        return Response({'article': article})
+        return Response({'hashtags': hashtags, 'article': article})
 
     def increment_likes(request, *args, **kwargs):
         article_id = kwargs.get('article_id')
@@ -141,7 +145,26 @@ class ArticleEdit(APIView):
         article_id = kwargs.get('article_id')
         article = Article.objects.get(id=article_id)
         articleform = ArticleForm(instance=article)
-        return Response({'articleform': articleform, 'article': article})
+        hashtagform = HashTagForm()
+        hashtags = HashTag.objects.filter(article__id=article_id)
+        return Response(
+            {'hashtags': hashtags, 'hashtagform': hashtagform, 'articleform': articleform, 'article': article})
+
+    def addhashtag(request, *args, **kwargs):
+        form = HashTagForm(request.POST)
+        if form.is_valid():
+            article_id = kwargs.get('article_id')
+            article = Article.objects.get(id=article_id)
+            name = form.cleaned_data['name']
+            tag = HashTag.objects.filter(name=name)
+            if not tag:
+                HashTag.objects.create(name=name)
+                tag = HashTag.objects.get(name=name)
+            if not Article.objects.filter(id=article_id, hashtag__name=name):
+                print("g")
+                tag.article.add(article)
+        return redirect(reverse('articleedit',
+                                kwargs={"article_id": article_id}))
 
 
 @permission_classes((permissions.AllowAny,))

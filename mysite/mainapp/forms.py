@@ -1,10 +1,12 @@
 from django import forms
 
-from .models import *
+from .fields import ListTextWidget
 
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
+
+from .models import Article, HashTag
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -20,15 +22,15 @@ class CustomUserChangeForm(UserChangeForm):
 
 
 class ArticleForm(forms.ModelForm):
-    description = forms.CharField(required=False, widget=forms.Textarea(attrs={'rows': 1, 'cols': 50}))
-    name = forms.CharField(required=False)
+    description = forms.CharField(label='Описание', required=False,
+                                  widget=forms.Textarea(attrs={'rows': 1, 'cols': 50}))
+    name = forms.CharField(label='Название', required=False)
+
     class Meta:
         model = Article
         fields = ['image', 'description', 'name']
         labels = {
             'image': 'Изображение',
-            'description': 'Описание',
-            'name': 'Название',
         }
         help_texts = {
             'name': '',
@@ -38,3 +40,18 @@ class ArticleForm(forms.ModelForm):
                 'max_length': 'this is too long',
             },
         }
+
+
+class HashTagForm(forms.Form):
+    name = forms.CharField(required=True)
+
+    def __init__(self, *args, **kwargs):
+        _list = kwargs.pop('data_list', None)
+        super(HashTagForm, self).__init__(*args, **kwargs)
+        choices = HashTag.objects.values_list('name', flat=True)
+        choices.query.set_limits(0, 10)
+        _list = choices
+        # the "name" parameter will allow you to use the same widget more than once in the same
+        # form, not setting this parameter differently will cuse all inputs display the
+        # same list.
+        self.fields['name'].widget = ListTextWidget(data_list=_list, name='list')

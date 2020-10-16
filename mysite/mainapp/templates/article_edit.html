@@ -11,6 +11,16 @@
 <p>
 <button type="submit">Сохранить</button>
 </form>
+<p>Хэштеги</p>
+{% for hashtag in hashtags %}
+ #{{ hashtag.name }}
+{% endfor %}
+<p>
+<form action="{% url 'addhashtag' article_id=article.id %}" method = "post">
+{% csrf_token %}
+{{ hashtagform.as_p }}
+<button  type="submit">Добавить</button>
+</form>
 <input type="button" value="Назад" onclick="location.href='{% url 'articlepage' article_id=article.id %}'" style="border: 2px solid seagreen;"  >
 
 {% endblock %}

@@ -44,3 +44,11 @@ class Article(models.Model):
     @property
     def total_views(self):
         return self.views.count()
+
+
+class HashTag(models.Model):
+    name = models.CharField(max_length=64, unique=True)
+    article = models.ManyToManyField(Article,related_name='hashtag')
+
+    def __str__(self):
+        return self.name
