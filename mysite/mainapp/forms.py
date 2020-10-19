@@ -8,6 +8,7 @@ from django.contrib.auth.forms import AuthenticationForm
 
 from .models import Article, HashTag
 
+from django.utils.translation import ugettext as _
 
 class CustomUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm):
@@ -25,10 +26,14 @@ class ArticleForm(forms.ModelForm):
     description = forms.CharField(label='Описание', required=False,
                                   widget=forms.Textarea(attrs={'rows': 1, 'cols': 50}))
     name = forms.CharField(label='Название', required=False)
-
+    url = forms.URLField(required=False,
+                         error_messages={
+                             "required": "Please enter a valid URL to an image (.jpg .jpeg .png)"
+                         },
+                         )
     class Meta:
         model = Article
-        fields = ['image', 'description', 'name']
+        fields = ['image', 'description', 'name','url']
         labels = {
             'image': 'Изображение',
         }
@@ -40,6 +45,9 @@ class ArticleForm(forms.ModelForm):
                 'max_length': 'this is too long',
             },
         }
+
+
+
 
 
 class HashTagForm(forms.Form):

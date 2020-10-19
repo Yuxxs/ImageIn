@@ -5,7 +5,7 @@
 {% block main %}
 
 <p1>{{ article.name }}</p1>
-<img style="border: 2px solid seagreen;" src="{% get_media_prefix %}{{article.image}}" >]
+<img style="border: 2px solid seagreen;" src="{% get_media_prefix %}{{article.image}}" >
 <p>
 {% for hashtag in hashtags %}
  #{{ hashtag.name }}

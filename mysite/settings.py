@@ -40,7 +40,9 @@ INSTALLED_APPS = [
     'django_extensions',
     'rest_framework',
     'crispy_forms',
+    'django_cleanup',
     'mainapp',
+
 ]
 
 REST_FRAMEWORK = {
@@ -119,6 +121,8 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+
 
 LOGIN_REDIRECT_URL = reverse_lazy('userpage')
 

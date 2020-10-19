@@ -1,3 +1,6 @@
+from tempfile import NamedTemporaryFile
+from urllib.parse import urlparse
+
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
@@ -26,6 +29,9 @@ from django.urls import reverse
 from mainapp.forms import ArticleForm, HashTagForm, CustomUserCreationForm
 
 from mainapp.filters import ArticleFilter
+import urllib
+from django.core.files import File
+import urllib.request
 
 
 @permission_classes((permissions.AllowAny,))
@@ -63,10 +69,22 @@ class UserMainPage(APIView):
         form = ArticleForm(request.POST, request.FILES)
 
         if form.is_valid():
+            img_url = form.cleaned_data["url"]
             note = form.save(commit=False)
-
             note.author = request.user
+            if img_url:
 
+                # set any other fields, but don't commit to DB (ie. don't save())
+                # name = urlparse(img_url).path.split('/')[-1]
+                """
+                content = urllib.request.urlretrieve(img_url,
+                                                     str(settings.MEDIA_ROOT) +"/"+ Article.generate_upload_path(self=None,
+                                                                                                     filename="img.jpg"))
+                """
+                img_temp = NamedTemporaryFile(delete=True)
+                img_temp.write(urllib.request.urlopen(img_url).read())
+                img_temp.flush()
+                note.image = File(img_temp)
             note.save()
         return redirect(reverse('userpage',
                                 kwargs={"username": request.user.username}))
@@ -85,7 +103,7 @@ class FeedPage(APIView):
 
     def get(self, request, *args, **kwargs):
         articles = Article.objects.order_by('id').all()
-        articles.query.set_limits(0, 10)
+        # articles.query.set_limits(0, 10)
         filter = ArticleFilter(request.GET, queryset=articles)
         return Response({'filter': filter})
 
