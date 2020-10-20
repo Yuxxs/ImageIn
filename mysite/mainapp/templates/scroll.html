@@ -1,0 +1,4 @@
+ {% load static %}
+ {% load crispy_forms_tags %}
+<img onclick="location.href='{% url 'articlepage' article_id=article.id %}'"
+     src="{% get_media_prefix %}{{article.image}}" />

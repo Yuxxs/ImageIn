@@ -9,6 +9,7 @@ from mainapp import views
 urlpatterns = [
    path('mainpage/admin/', views.AdminMainPage.as_view(), name='adminpage'),
    path('feed/', views.FeedPage.as_view(), name='feedpage'),
+   path('feed/load/', views.FeedPage.load, name='feedload'),
    path('articles/<int:article_id>', views.ArticlePage.as_view(), name='articlepage'),
    path('articles/<int:article_id>/delete', views.ArticlePage.delete, name='articledelete'),
    path('articles/<int:article_id>/edit', views.ArticleEdit.as_view(), name='articleedit'),

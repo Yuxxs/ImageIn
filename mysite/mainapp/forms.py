@@ -10,6 +10,7 @@ from .models import Article, HashTag
 
 from django.utils.translation import ugettext as _
 
+
 class CustomUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm):
         model = User
@@ -31,9 +32,10 @@ class ArticleForm(forms.ModelForm):
                              "required": "Please enter a valid URL to an image (.jpg .jpeg .png)"
                          },
                          )
+
     class Meta:
         model = Article
-        fields = ['image', 'description', 'name','url']
+        fields = ['image', 'description', 'name', 'url']
         labels = {
             'image': 'Изображение',
         }
@@ -47,11 +49,8 @@ class ArticleForm(forms.ModelForm):
         }
 
 
-
-
-
 class HashTagForm(forms.Form):
-    name = forms.CharField(required=True)
+    name = forms.CharField(required=False)
 
     def __init__(self, *args, **kwargs):
         _list = kwargs.pop('data_list', None)

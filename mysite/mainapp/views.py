@@ -10,6 +10,7 @@ import datetime
 # Create your views here.
 from django.template.context_processors import csrf
 from django.template.defaulttags import register
+from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import generics, permissions, status
 from rest_framework.decorators import api_view, permission_classes
@@ -73,7 +74,6 @@ class UserMainPage(APIView):
             note = form.save(commit=False)
             note.author = request.user
             if img_url:
-
                 # set any other fields, but don't commit to DB (ie. don't save())
                 # name = urlparse(img_url).path.split('/')[-1]
                 """
@@ -102,10 +102,20 @@ class FeedPage(APIView):
     template_name = 'feed.html'
 
     def get(self, request, *args, **kwargs):
-        articles = Article.objects.order_by('id').all()
-        # articles.query.set_limits(0, 10)
-        filter = ArticleFilter(request.GET, queryset=articles)
-        return Response({'filter': filter})
+        form = HashTagForm(request.GET)
+        return Response({'hashtagform': form})
+
+    def load(request, *args, **kwargs):
+
+        num = int(request.GET['num'])
+        tag = request.GET['tag']
+        if tag:
+            articles = Article.objects.order_by('id').filter(hashtag__name=tag)
+        else:
+            articles = Article.objects.order_by('id').all()
+        articles.query.set_limits(num, num + 1)
+        html = render_to_string('scroll.html', {'article': articles[0]})
+        return HttpResponse(html)
 
 
 @permission_classes((permissions.AllowAny,))
