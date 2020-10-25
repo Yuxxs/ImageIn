@@ -4,11 +4,11 @@ from .fields import ListTextWidget
 
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import AuthenticationForm
+
 
 from .models import Article, HashTag
 
-from django.utils.translation import ugettext as _
+
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -39,14 +39,12 @@ class ArticleForm(forms.ModelForm):
         labels = {
             'image': 'Изображение',
         }
-        help_texts = {
-            'name': '',
-        }
         error_messages = {
             'name': {
                 'max_length': 'this is too long',
             },
         }
+
 
 
 class HashTagForm(forms.Form):

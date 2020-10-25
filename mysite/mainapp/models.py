@@ -5,15 +5,9 @@ from django.db import models
 
 # Create your models here
 
-from django.urls import reverse
 from django.utils import timezone
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager, AbstractUser, User
-from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
-from django.contrib.contenttypes.models import ContentType
 import settings
 from django.utils.text import slugify
-from importlib_resources._common import _
-
 
 class Like(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,

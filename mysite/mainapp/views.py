@@ -29,7 +29,6 @@ from django.urls import reverse
 
 from mainapp.forms import ArticleForm, HashTagForm, CustomUserCreationForm
 
-from mainapp.filters import ArticleFilter
 import urllib
 from django.core.files import File
 import urllib.request
@@ -74,8 +73,6 @@ class UserMainPage(APIView):
             note = form.save(commit=False)
             note.author = request.user
             if img_url:
-                # set any other fields, but don't commit to DB (ie. don't save())
-                # name = urlparse(img_url).path.split('/')[-1]
                 """
                 content = urllib.request.urlretrieve(img_url,
                                                      str(settings.MEDIA_ROOT) +"/"+ Article.generate_upload_path(self=None,
@@ -85,15 +82,23 @@ class UserMainPage(APIView):
                 img_temp.write(urllib.request.urlopen(img_url).read())
                 img_temp.flush()
                 note.image = File(img_temp)
+
             note.save()
         return redirect(reverse('userpage',
                                 kwargs={"username": request.user.username}))
 
     def get(self, request, *args, **kwargs):
-        articles = Article.objects.filter(author=request.user)
         articleform = ArticleForm()
-        filter = ArticleFilter(request.GET, queryset=articles)
-        return Response({'filter': filter, 'articleform': articleform})
+        hashtagform = HashTagForm(request.GET)
+        if hashtagform.is_valid():
+            tag = hashtagform.cleaned_data["name"]
+            if tag:
+                articles = Article.objects.filter(author=request.user, hashtag__name=tag)
+            else:
+                articles = Article.objects.filter(author=request.user)
+        else:
+            articles = Article.objects.filter(author=request.user)
+        return Response({'hashtagform': hashtagform, 'articleform': articleform, 'articles': articles})
 
 
 @permission_classes((permissions.AllowAny,))
@@ -184,12 +189,11 @@ class ArticleEdit(APIView):
             article_id = kwargs.get('article_id')
             article = Article.objects.get(id=article_id)
             name = form.cleaned_data['name']
-            tag = HashTag.objects.filter(name=name)
+            tag = HashTag.objects.filter(name=name)[0]
             if not tag:
                 HashTag.objects.create(name=name)
                 tag = HashTag.objects.get(name=name)
-            if not Article.objects.filter(id=article_id, hashtag__name=name):
-                print("g")
+            if not tag.article.filter(id=article_id):
                 tag.article.add(article)
         return redirect(reverse('articleedit',
                                 kwargs={"article_id": article_id}))

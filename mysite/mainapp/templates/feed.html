@@ -30,13 +30,7 @@
  {{ hashtagform.name }}
 <button type="submit">Применить фильтр</button>
  </form>
-
  <p></p>
- <button id = "getArticle" class = "btn btn-primary">
-          Get Message
-          </button>
-  <p></p>
-
   <div id="content"  class="content">
  {% for article in filter.qs %}
 
@@ -48,7 +42,6 @@
  <script>
 function load(num, tag)
 {
-
  $.ajax({
      type: 'get',
      url: '{% url 'feedload' %}',
@@ -66,11 +59,12 @@ function load(num, tag)
 };
  $(document).ready(function() {
  var tag = document.getElementById("id_name").value;
+var myDiv = document.getElementById("maincontent");
+var num=0;
+load(num, tag);
+window.addEventListener('scroll', function() {
 
- var num=0;
-  load(num, tag);
- window.addEventListener('scroll', function() {
-if (pageYOffset>100*(num+1)){
+if ((window.innerHeight + window.scrollY+150) >= document.body.offsetHeight) {
 tag = document.getElementById("id_name").value;
 num +=1;
 load(num, tag);
